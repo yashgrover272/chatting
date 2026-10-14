@@ -1,0 +1,253 @@
+:root {
+  color-scheme: light;
+  font-family: "Aptos", "Trebuchet MS", sans-serif;
+  color: #202923;
+  background: #f2f4f0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #202923;
+  --muted: #667169;
+  --line: #d9dfd8;
+  --paper: #fbfcf9;
+  --green: #245b43;
+  --green-soft: #e0ece2;
+  --coral-soft: #f3e4de;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f2f4f0;
+  background-image: radial-gradient(#dce2da 0.7px, transparent 0.7px);
+  background-size: 16px 16px;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 16px;
+  color: #fff;
+  background: var(--green);
+  cursor: pointer;
+}
+
+button:hover {
+  background: #194833;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #d58c72;
+  outline-offset: 2px;
+}
+
+.chat-app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding: 12px max(20px, calc((100vw - 900px) / 2));
+  background: var(--paper);
+}
+
+.topbar h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 650;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+#connection-status {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.share-button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  padding: 0 12px;
+  color: var(--ink);
+  background: transparent;
+  white-space: nowrap;
+}
+
+.share-button:hover {
+  background: #edf1eb;
+}
+
+.conversation {
+  display: flex;
+  width: min(100% - 32px, 760px);
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  align-self: center;
+  padding: 26px 0 22px;
+}
+
+.identity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 0 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.identity-row input {
+  width: min(100%, 240px);
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0 10px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.messages {
+  display: flex;
+  min-height: 240px;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 12px 0 20px;
+  list-style: none;
+}
+
+.message {
+  width: fit-content;
+  max-width: min(78%, 560px);
+  border-radius: 6px;
+  padding: 10px 13px;
+  overflow-wrap: anywhere;
+  background: var(--coral-soft);
+  animation: appear 160ms ease-out both;
+}
+
+.message.is-mine {
+  align-self: flex-end;
+  background: var(--green-soft);
+}
+
+.message-person {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.message-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.message-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.message-form textarea {
+  min-height: 44px;
+  max-height: 160px;
+  flex: 1;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 11px 12px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.message-form button {
+  min-width: 74px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .topbar {
+    min-height: 60px;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .topbar-actions {
+    gap: 9px;
+  }
+
+  #connection-status {
+    font-size: 12px;
+  }
+
+  .share-button {
+    min-height: 36px;
+    padding: 0 9px;
+    font-size: 13px;
+  }
+
+  .conversation {
+    width: calc(100% - 28px);
+    padding-top: 18px;
+  }
+
+  .message {
+    max-width: 88%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
