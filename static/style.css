@@ -121,14 +121,9 @@ textarea:focus-visible {
   font-size: 14px;
 }
 
-.identity-row input {
-  width: min(100%, 240px);
-  min-height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  padding: 0 10px;
+.identity-row strong {
   color: var(--ink);
-  background: var(--paper);
+  font-weight: 650;
 }
 
 .messages {

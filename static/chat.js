@@ -1,6 +1,6 @@
 const statusElement = document.querySelector("#connection-status");
 const messagesElement = document.querySelector("#messages");
-const nameInput = document.querySelector("#person-name");
+const roleElement = document.querySelector("#person-role");
 const messageInput = document.querySelector("#message-input");
 const messageForm = document.querySelector("#message-form");
 const sendButton = document.querySelector("#send-button");
@@ -14,14 +14,20 @@ if (!room) {
   window.history.replaceState({}, "", address);
 }
 
-nameInput.value = localStorage.getItem("chat-name") || "";
+let deviceId = localStorage.getItem("chat-device-id");
+if (!deviceId) {
+  deviceId = crypto.randomUUID();
+  localStorage.setItem("chat-device-id", deviceId);
+}
+
+let person = "";
 let lastMessageId = 0;
 let loadingMessages = false;
 
 function showMessage(message) {
   const item = document.createElement("li");
   item.className = "message";
-  if (message.person === nameInput.value.trim()) {
+  if (message.person === person) {
     item.classList.add("is-mine");
   }
 
@@ -61,23 +67,45 @@ async function loadMessages() {
   }
 }
 
-nameInput.addEventListener("change", () => {
-  localStorage.setItem("chat-name", nameInput.value.trim());
-});
+async function joinRoom() {
+  statusElement.textContent = "Joining";
+  try {
+    const response = await fetch("/api/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ room, device_id: deviceId }),
+    });
+
+    if (response.status === 409) {
+      roleElement.textContent = "Conversation is full";
+      statusElement.textContent = "Room full";
+      messageInput.disabled = true;
+      sendButton.disabled = true;
+      return;
+    }
+    if (!response.ok) throw new Error("Unable to join conversation");
+
+    const result = await response.json();
+    person = result.person;
+    roleElement.textContent = person;
+    await loadMessages();
+  } catch {
+    statusElement.textContent = "Reconnecting";
+    window.setTimeout(joinRoom, 1500);
+  }
+}
 
 messageForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const person = nameInput.value.trim();
   const message = messageInput.value.trim();
   if (!person || !message) return;
 
-  localStorage.setItem("chat-name", person);
   sendButton.disabled = true;
   try {
     const response = await fetch("/api/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ room, person, message }),
+      body: JSON.stringify({ room, device_id: deviceId, message }),
     });
     if (!response.ok) throw new Error("Unable to send message");
     messageInput.value = "";
@@ -103,4 +131,4 @@ copyLinkButton.addEventListener("click", async () => {
   }
 });
 
-loadMessages();
+joinRoom();

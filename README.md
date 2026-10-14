@@ -9,7 +9,7 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-Open `http://localhost:5000` and share the invite link with the other person.
+Open `http://localhost:5000` and share the invite link with the other person. The first browser to join becomes Person 1, and the second becomes Person 2. Each browser keeps its role when it reconnects; each conversation is limited to two browser profiles.
 
 ## Deploy on Render
 
